@@ -8,7 +8,8 @@ MCP chip1(1, 10);
 MCP chip2(2, 10);
 MCP chip3(3, 10);
 Servo s;
-int magnifier = 40;
+int weight = 10;
+int bias = 100;
 
 void loop() {
   if (Serial.available()) {
@@ -23,10 +24,12 @@ void loop() {
           data = abs(128 - data);
           offset = 0;
         }
-        dwrite(count + offset);
-        delay(data * magnifier);
+        if (weight != 0) {
+          dwrite(count + offset);
+          delay(data * weight + bias);
+        }
         dwrite(-1);
-        delay(100);
+        delay(10);
       }
       else break;
       dwrite(-1);
@@ -36,18 +39,21 @@ void loop() {
     delay(100);
   }
   else {
-    //    for(int i=0;i<54;i++){
+    //    for (int i = 0; i < 27+27; i++) {
     //      dwrite(i);
     //      delay(100);
     //    }
+    //    dwrite(5+27);
     dwrite(-1);
+    delay(1000);
   }
-  delay(1000);
+  dwrite(-1);
+  delay(2000);
 }
 
 void setup() {
   Serial.begin(9600);
-//  Wire.begin();
+  //  Wire.begin();
   chip0.begin();
   chip1.begin();
   chip2.begin();
